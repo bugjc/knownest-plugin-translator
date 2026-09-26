@@ -1,0 +1,8 @@
+[
+  { "tool": "translate_text", "args": { "text": "Knowledge is power.", "target_lang": "zh" }, "expect": { "outputContains": "只输出译文" } },
+  { "tool": "translate_text", "args": { "text": "Knowledge is power." }, "expect": { "outputContains": "翻译成中文" } },
+  { "tool": "translate_text", "args": { "text": "知识就是力量。" }, "expect": { "outputContains": "翻译成英文" } },
+  { "tool": "translate_text", "args": { "text": "   " }, "expect": { "errorContains": "EMPTY_TEXT" } },
+  { "tool": "translate_doc", "args": { "doc_path": "no-such-doc.md" }, "expect": { "errorContains": "DOC_NOT_FOUND" } },
+  { "tool": "save_translation", "args": { "doc_path": "C:\\k\\notes\\a.md", "translation": "x" }, "expect": { "errorContains": "NO_SESSION" } }
+]

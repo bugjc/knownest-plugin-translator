@@ -1,0 +1,54 @@
+{
+  "id": "translator",
+  "name": "翻译助手",
+  "version": "0.9.0",
+  "description": "翻译能力包：对话即译 + 文档级翻译（译文落 sys-hub「翻译/」，MD5 缓存命中秒回；面板一键直翻走免费快引擎）",
+  "entry": "index.js",
+  "permissions": [
+    "agent:tools",
+    "file:read",
+    "file:write",
+    "db:read",
+    "db:write",
+    "net:http"
+  ],
+  "contributions": [
+    {
+      "point": "workspace.action",
+      "slot": "editor.header_right",
+      "action": "译文",
+      "panel": "translate.form"
+    },
+    {
+      "point": "selection.action",
+      "slot": "selection.popup",
+      "action": "翻译",
+      "method": "translate_selection",
+      "whenConfig": "selection_enabled"
+    },
+    {
+      "point": "nav.entry",
+      "slot": "nav.sidebar",
+      "key": "translate",
+      "action": "翻译",
+      "method": "pageTranslate"
+    }
+  ],
+  "configSchema": [
+    {
+      "key": "selection_enabled",
+      "label": "选中文字后显示「翻译」浮层",
+      "type": "boolean",
+      "default": false,
+      "description": "应用内选中文字（编辑器/预览等）后浮出「翻译」按钮，点击即译（免费快引擎，默认自动互译方向）；快捷键触发同效（默认 Ctrl+Shift+Alt+T，实际生效键位见「设置 → 快捷键」）。开启后配置变更刷新页面生效"
+    },
+    {
+      "key": "bilingual",
+      "label": "文档翻译双语交错（原文+译文对照）",
+      "type": "boolean",
+      "default": false,
+      "description": "开启后文档翻译产出为双语交错格式（每段先原文后译文，对照学习/朗读友好）；缓存按模式区分，切换后同文档首次翻译会重新生成"
+    }
+  ],
+  "usage": "把外文资料变成可检索、可出题的中文知识资产（定位：资料中文化 + 译文资产化）。\n怎么用：\n1. 对话即译：对小诺说「把这段话翻译成中文」（或任意应用复制文本后划词快捷键触发，补一句「翻译」；快捷键默认值与实际生效键位见「设置 → 快捷键」）——只输出译文、术语保护、格式保真。\n2. 文档翻译：对小诺说「翻译 <文档名>」——自动检查缓存（源文档未变更秒回），未命中则按批给出素材、逐批翻译后自动落盘 sys-hub「翻译/<源仓库>/」，译文头部可回跳源文档，入库即可检索、可出题。\n3. 默认自动互译方向（中文源→英文，其他→中文），也可指定「译成日文」。\n翻译由当前 Agent 模型完成（消耗模型配额，长文档分批多轮）；无需配置任何翻译服务密钥。"
+}
