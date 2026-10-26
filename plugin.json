@@ -1,8 +1,8 @@
 {
   "id": "translator",
   "name": "翻译助手",
-  "version": "0.9.0",
-  "description": "翻译能力包：对话即译 + 文档级翻译（译文落 sys-hub「翻译/」，MD5 缓存命中秒回；面板一键直翻走免费快引擎）",
+  "version": "0.16.5",
+  "description": "翻译插件：对话即译 + 文档级翻译（译文落 sys-hub 工作空间 translator/translations/（收敛点批 2026-10-10，存量在「翻译/」），MD5 缓存命中秒回；面板一键直翻走免费快引擎）+ 领域方案术语包（软件/IT·学术·商务，翻译自动按对照执行）",
   "entry": "index.js",
   "permissions": [
     "agent:tools",
@@ -16,39 +16,136 @@
     {
       "point": "workspace.action",
       "slot": "editor.header_right",
-      "action": "译文",
-      "panel": "translate.form"
+      "action": "$t{translator.contrib.workspace-action}",
+      "panel": "translate.form",
+      "appliesTo": [
+        "markdown"
+      ]
     },
     {
       "point": "selection.action",
       "slot": "selection.popup",
-      "action": "翻译",
+      "action": "$t{translator.contrib.selection-action}",
       "method": "translate_selection",
-      "whenConfig": "selection_enabled"
+      "whenConfig": "selection_enabled",
+      "icon": "translate"
     },
     {
       "point": "nav.entry",
       "slot": "nav.sidebar",
       "key": "translate",
-      "action": "翻译",
-      "method": "pageTranslate"
+      "action": "$t{translator.nav.translate}",
+      "method": "pageTranslate",
+      "icon": "translate",
+      "order": 5
     }
   ],
   "configSchema": [
     {
       "key": "selection_enabled",
-      "label": "选中文字后显示「翻译」浮层",
+      "label": "$t{translator.config.selection_enabled}",
       "type": "boolean",
       "default": false,
-      "description": "应用内选中文字（编辑器/预览等）后浮出「翻译」按钮，点击即译（免费快引擎，默认自动互译方向）；快捷键触发同效（默认 Ctrl+Shift+Alt+T，实际生效键位见「设置 → 快捷键」）。开启后配置变更刷新页面生效"
+      "description": "$t{translator.config.selection_enabled.desc}"
     },
     {
       "key": "bilingual",
-      "label": "文档翻译双语交错（原文+译文对照）",
+      "label": "$t{translator.config.bilingual}",
       "type": "boolean",
       "default": false,
-      "description": "开启后文档翻译产出为双语交错格式（每段先原文后译文，对照学习/朗读友好）；缓存按模式区分，切换后同文档首次翻译会重新生成"
+      "description": "$t{translator.config.bilingual.desc}"
     }
   ],
-  "usage": "把外文资料变成可检索、可出题的中文知识资产（定位：资料中文化 + 译文资产化）。\n怎么用：\n1. 对话即译：对小诺说「把这段话翻译成中文」（或任意应用复制文本后划词快捷键触发，补一句「翻译」；快捷键默认值与实际生效键位见「设置 → 快捷键」）——只输出译文、术语保护、格式保真。\n2. 文档翻译：对小诺说「翻译 <文档名>」——自动检查缓存（源文档未变更秒回），未命中则按批给出素材、逐批翻译后自动落盘 sys-hub「翻译/<源仓库>/」，译文头部可回跳源文档，入库即可检索、可出题。\n3. 默认自动互译方向（中文源→英文，其他→中文），也可指定「译成日文」。\n翻译由当前 Agent 模型完成（消耗模型配额，长文档分批多轮）；无需配置任何翻译服务密钥。"
+  "usage": "$t{translator.usage}",
+  "i18n": {
+    "zh-CN": {
+      "translator.contrib.workspace-action": "译文",
+      "translator.contrib.selection-action": "翻译",
+      "translator.config.selection_enabled": "选中文字后显示「翻译」浮层",
+      "translator.config.selection_enabled.desc": "应用内选中文字（编辑器/预览等）后浮出「翻译」按钮，点击即译（免费快引擎，默认自动互译方向）；快捷键触发同效（默认 Ctrl+Shift+Alt+T，实际生效键位见「设置 → 快捷键」）。开启后配置变更刷新页面生效",
+      "translator.config.bilingual": "文档翻译双语交错（原文+译文对照）",
+      "translator.config.bilingual.desc": "开启后文档翻译产出为双语交错格式（每段先原文后译文，对照学习/朗读友好）；缓存按模式区分，切换后同文档首次翻译会重新生成",
+      "translator.usage": "**能干什么**：把外文资料变成可检索、可出题的中文知识资产（定位：资料中文化 + 译文资产化）。\n\n**怎么用**：\n1. 对话即译：对白泽说「把这段话翻译成中文」（或任意应用复制文本后划词快捷键触发，补一句「翻译」；快捷键默认值与实际生效键位见「设置 → 快捷键」）——只输出译文、术语保护、格式保真；\n2. 文档翻译：对白泽说「翻译 <文档名>」——自动检查缓存（源文档未变更秒回），未命中则按批给出素材、逐批翻译后自动落盘 sys-hub「翻译/<源仓库>/」，译文头部可回跳源文档，入库即可检索、可出题；\n3. 默认自动互译方向（中文源→英文，其他→中文），也可指定「译成日文」。\n\n**说明**：翻译由当前 Agent 模型完成（消耗模型配额，长文档分批多轮）；无需配置任何翻译服务密钥。",
+      "translator.display-name": "翻译助手",
+      "translator.nav.translate": "翻译"
+    },
+    "en-US": {
+      "translator.contrib.workspace-action": "Translate",
+      "translator.contrib.selection-action": "Translation",
+      "translator.config.selection_enabled": "Show the \"Translate\" popup on text selection",
+      "translator.config.selection_enabled.desc": "Selecting text in the app (editor/preview etc.) shows a \"Translate\" button that translates on click (free fast engine, auto direction by default); the hotkey does the same (default Ctrl+Shift+Alt+T, effective key on \"Settings → Shortcuts\"). When on, config changes apply after a page refresh",
+      "translator.config.bilingual": "Interleaved bilingual document translation (source + translation)",
+      "translator.config.bilingual.desc": "Document translation outputs interleaved bilingual format (each paragraph: source then translation — friendly for study and read-aloud); cache is per-mode, so the first translation of the same document after switching regenerates",
+      "translator.usage": "**What it does**: turns foreign-language material into searchable, question-generatable Chinese knowledge assets (positioning: sinicize material + make translations assets).\n\n**How to use**:\n1. Translate as you chat: tell Baize \"Translate this passage into Chinese\" (or copy text in any app and trigger the selection shortcut, then add \"translate\"; shortcut defaults and effective keys are in \"Settings → Shortcuts\") — translation only, term protection, format fidelity;\n2. Document translation: tell Baize \"Translate <document name>\" — the cache is checked automatically (instant when the source document is unchanged); on a miss it translates batch by batch with source material and writes results to sys-hub \"Translation/<source repo>/\"; the translation header links back to the source document, and once in the library it's searchable and question-generatable;\n3. Default auto direction (Chinese source → English, otherwise → Chinese); you can also specify \"translate into Japanese\".\n\n**Notes**: translation is done by your current Agent model (consumes model quota; long documents take multiple batches); no translation-service keys to configure.",
+      "translator.display-name": "Translator",
+      "翻译": "Translation",
+      "选中文字后显示「翻译」浮层": "Show the \"Translate\" popup on text selection",
+      "应用内选中文字（编辑器/预览等）后浮出「翻译」按钮，点击即译（免费快引擎，默认自动互译方向）；快捷键触发同效（默认 Ctrl+Shift+Alt+T，实际生效键位见「设置 → 快捷键」）。开启后配置变更刷新页面生效": "Selecting text in the app (editor/preview etc.) shows a \"Translate\" button that translates on click (free fast engine, auto direction by default); the hotkey does the same (default Ctrl+Shift+Alt+T, effective key on \"Settings → Shortcuts\"). When on, config changes apply after a page refresh",
+      "文档翻译双语交错（原文+译文对照）": "Interleaved bilingual document translation (source + translation)",
+      "开启后文档翻译产出为双语交错格式（每段先原文后译文，对照学习/朗读友好）；缓存按模式区分，切换后同文档首次翻译会重新生成": "Document translation outputs interleaved bilingual format (each paragraph: source then translation — friendly for study and read-aloud); cache is per-mode, so the first translation of the same document after switching regenerates",
+      "出网知情确认": "Outbound Transfer Consent",
+      "是": "Yes",
+      "否": "No",
+      "已有译文直接打开（源文档未变更时 MD5 命中秒回，按已保存内容判定）；首次翻译对白泽说「翻译 <文档名>」或未命中时点「交给白泽翻译」，完成后此处即可打开。免费快引擎一键直翻会把原文发送至 MyMemory（境外公共服务）：「出网知情确认」选「是」即同意出境（一次同意，此后不再询问）；不想出境请保持「否」并改用 AI 质量轨（配置了模型，不经 MyMemory）。": "Open an existing translation directly (MD5 cache hit when the source document is unchanged, judged by saved content); for a first translation tell Baize \"Translate <doc name>\" or click \"Hand to Baize\" on a miss — it opens here once done. One-click direct translation via the free fast engine sends the source text to MyMemory (an overseas public service): choosing \"Yes\" under \"Outbound Transfer Consent\" consents to the transfer (one-time consent, not asked again); keep \"No\" to stay local and use the AI quality track (a configured model; never touches MyMemory).",
+      "翻译助手": "Translator",
+      "**能干什么**：把外文资料变成可检索、可出题的中文知识资产（定位：资料中文化 + 译文资产化）。\n\n**怎么用**：\n1. 对话即译：对白泽说「把这段话翻译成中文」（或任意应用复制文本后划词快捷键触发，补一句「翻译」；快捷键默认值与实际生效键位见「设置 → 快捷键」）——只输出译文、术语保护、格式保真；\n2. 文档翻译：对白泽说「翻译 <文档名>」——自动检查缓存（源文档未变更秒回），未命中则按批给出素材、逐批翻译后自动落盘 sys-hub「翻译/<源仓库>/」，译文头部可回跳源文档，入库即可检索、可出题；\n3. 默认自动互译方向（中文源→英文，其他→中文），也可指定「译成日文」。\n\n**说明**：翻译由当前 Agent 模型完成（消耗模型配额，长文档分批多轮）；无需配置任何翻译服务密钥。": "**What it does**: turns foreign-language material into searchable, question-generatable Chinese knowledge assets (positioning: sinicize material + make translations assets).\n\n**How to use**:\n1. Translate as you chat: tell Baize \"Translate this passage into Chinese\" (or copy text in any app and trigger the selection shortcut, then add \"translate\"; shortcut defaults and effective keys are in \"Settings → Shortcuts\") — translation only, term protection, format fidelity;\n2. Document translation: tell Baize \"Translate <document name>\" — the cache is checked automatically (instant when the source document is unchanged); on a miss it translates batch by batch with source material and writes results to sys-hub \"Translation/<source repo>/\"; the translation header links back to the source document, and once in the library it's searchable and question-generatable;\n3. Default auto direction (Chinese source → English, otherwise → Chinese); you can also specify \"translate into Japanese\".\n\n**Notes**: translation is done by your current Agent model (consumes model quota; long documents take multiple batches); no translation-service keys to configure.",
+      "翻译插件：对话即译 + 文档级翻译（译文落 sys-hub 工作空间 translator/translations/（收敛点批 2026-10-10，存量在「翻译/」），MD5 缓存命中秒回；面板一键直翻走免费快引擎）+ 领域方案术语包（软件/IT·学术·商务，翻译自动按对照执行）": "Translator: translate-as-you-chat + document-level translation (output lands in the sys-hub workspace at translator/translations/ (consolidated 2026-10-10; legacy items under '翻译/'), MD5 cache hits return instantly; the panel's one-click direct translation uses the free fast engine) + domain glossary packs (software/IT · academic · business, applied automatically during translation).",
+      "translator.nav.translate": "Translation",
+      "领域方案（启用后该领域高频术语自动按对照翻译，自定义术语始终优先）": "Domain Packs (once enabled, high-frequency terms in that domain are translated by the glossary automatically; custom terms always take priority)",
+      "未启用。启用示例：软件/IT 包会把 prompt 统一译为「提示词」。对应用内翻译生效，应用外划词小窗不适用": "Not enabled. Example: the Software/IT pack translates \"prompt\" as \"提示词\" consistently. Applies to in-app translation; the outside-app selection popup is not covered",
+      "领域方案": "Domain Pack",
+      "关（不启用）": "Off (disabled)",
+      "保存领域方案": "Save Domain Pack",
+      "批量导入（每行一条：术语<分隔符>译名；支持从 Excel 直接复制两列粘贴）": "Bulk Import (one entry per line: term<separator>translation; paste two columns copied straight from Excel)",
+      "同名术语覆盖既有译名；无法解析的行逐行披露，不影响其余行入库；支持从 Excel 直接复制两列粘贴": "Duplicate terms overwrite existing translations; unparseable lines are reported one by one without blocking the rest; paste two columns copied straight from Excel",
+      "术语列表": "Term List",
+      "导入术语": "Import Terms",
+      "术语表": "Glossary",
+      "输入翻译": "Type to Translate",
+      "输入文本即时翻译（免费快引擎，默认自动互译方向；划词与输入翻译共享缓存，同文本秒回）": "Translate text on the spot (free quick engine, auto direction by default; shares the cache with selection translation — the same text returns instantly)",
+      "原文": "Source Text",
+      "目标语言": "Target Language",
+      "自动互译": "Auto",
+      "中文": "Chinese",
+      "英文": "English",
+      "日文": "Japanese",
+      "韩文": "Korean",
+      "法文": "French",
+      "德文": "German",
+      "翻译历史（sys-hub「翻译/」，点击行查看译文）": "Translation History (sys-hub \"Translations/\"; click a row to open the translation)",
+      "文档": "Document",
+      "添加术语（翻译时自动强制按对照翻译，对话中也可用 manage_terms 管理）": "Add Term (enforced in translation automatically; also manageable via manage_terms in chat)",
+      "命中的术语将按既定译名翻译（如 prompt→提示词）。对应用内翻译生效；应用外划词小窗与免费快引擎不强制": "Matched terms are translated with the fixed translation (e.g. prompt→提示词). Applies to in-app translation; the outside-app selection popup and the free quick engine do not enforce it",
+      "术语原文": "Term",
+      "既定译名": "Fixed Translation",
+      "如 prompt": "e.g. prompt",
+      "如 提示词": "e.g. glossary",
+      "加入术语表": "Add to Glossary",
+      "我的术语表": "My Glossary",
+      "术语": "Term",
+      "译名": "Translation",
+      "删除": "Delete",
+      "prompt\t提示词\nembedding\t嵌入": "prompt\tterminology\nembedding\tembedding"
+    }
+  },
+  "category": "效率工具",
+  "tags": [
+    "翻译",
+    "双语",
+    "术语"
+  ],
+  "agentTools": [
+    {
+      "name": "translate_text"
+    },
+    {
+      "name": "translate_doc"
+    },
+    {
+      "name": "save_translation"
+    },
+    {
+      "name": "manage_terms"
+    }
+  ]
 }

@@ -4,5 +4,12 @@
   { "tool": "translate_text", "args": { "text": "知识就是力量。" }, "expect": { "outputContains": "翻译成英文" } },
   { "tool": "translate_text", "args": { "text": "   " }, "expect": { "errorContains": "EMPTY_TEXT" } },
   { "tool": "translate_doc", "args": { "doc_path": "no-such-doc.md" }, "expect": { "errorContains": "DOC_NOT_FOUND" } },
-  { "tool": "save_translation", "args": { "doc_path": "C:\\k\\notes\\a.md", "translation": "x" }, "expect": { "errorContains": "NO_SESSION" } }
+  { "tool": "save_translation", "args": { "doc_path": "C:\\k\\notes\\a.md", "translation": "x" }, "expect": { "errorContains": "NO_SESSION" } },
+  { "tool": "manage_terms", "args": { "action": "list" }, "expect": { "outputContains": "术语表为空" } },
+  { "tool": "manage_terms", "args": { "action": "add", "term": "prompt", "translation": "提示词" }, "expect": { "outputContains": "术语已入表" } },
+  { "tool": "manage_terms", "args": { "action": "list" }, "expect": { "outputContains": "prompt → 提示词" } },
+  { "tool": "translate_text", "args": { "text": "The prompt defines the agent behavior.", "target_lang": "zh" }, "expect": { "outputContains": "术语对照（以下术语必须按对照翻译）：prompt→提示词" } },
+  { "tool": "translate_text", "args": { "text": "The prompt defines the agent behavior.", "target_lang": "zh" }, "expect": { "outputContains": "📎 术语表已注入 1 条对照约束" } },
+  { "tool": "manage_terms", "args": { "action": "remove", "term": "prompt" }, "expect": { "outputContains": "已删除术语" } },
+  { "tool": "translate_text", "args": { "text": "The prompt defines the agent behavior.", "target_lang": "zh" }, "expect": { "outputNotContains": "术语对照" } }
 ]
